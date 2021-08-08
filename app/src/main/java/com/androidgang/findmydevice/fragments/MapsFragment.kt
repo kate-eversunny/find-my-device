@@ -1,5 +1,6 @@
 package com.androidgang.findmydevice.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,13 @@ import com.androidgang.findmydevice.models.Smartphone
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
 import kotlin.properties.Delegates.notNull
+
 
 class MapsFragment : Fragment() {
 
@@ -31,8 +35,23 @@ class MapsFragment : Fragment() {
 
     private val callback = OnMapReadyCallback { googleMap ->
         val devicePlace = LatLng(device.latitude, device.longitude)
+        googleMap.uiSettings.isZoomControlsEnabled = true
+        googleMap.uiSettings.isCompassEnabled = true
+        googleMap.uiSettings.isMyLocationButtonEnabled = true
+        googleMap.uiSettings.setAllGesturesEnabled(true)
+        googleMap.isTrafficEnabled = true;
+        val cameraPosition = CameraPosition.Builder().target(devicePlace).zoom(12f).build()
         googleMap.addMarker(MarkerOptions().position(devicePlace).title("Here is your device"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(devicePlace))
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+        val circleOptions = CircleOptions()
+            .center(devicePlace)
+            .radius(1000.0)
+            .fillColor(Color.parseColor("#79C15656"))
+            .strokeColor(Color.BLUE)
+            .strokeWidth(5f)
+
+        googleMap.addCircle(circleOptions)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
