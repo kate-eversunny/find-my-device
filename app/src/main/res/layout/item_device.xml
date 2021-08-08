@@ -2,48 +2,55 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
     android:layout_width="match_parent"
+    android:background="@drawable/white_border_shape_button_rounded"
     android:layout_height="wrap_content">
 
 
     <ImageView
-        android:id="@+id/iv_device_icon"
+        android:id="@+id/iv_item_device_icon"
         android:layout_width="0dp"
         app:layout_constraintDimensionRatio="1:1"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:scaleType="fitXY"
         android:src="@drawable/ic_device"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_device_last_seen"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_device_last_seen"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_device_name" />
+        app:layout_constraintTop_toTopOf="@+id/tv_item_device_name" />
 
     <TextView
-        android:id="@+id/tv_device_name"
-        android:layout_width="wrap_content"
+        android:id="@+id/tv_item_device_name"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="21dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
+        android:layout_marginEnd="10dp"
         android:text="Device name"
         android:textColor="@color/black"
         android:textSize="22sp"
-        app:layout_constraintStart_toEndOf="@+id/iv_device_icon"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_item_device_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_device_imei"
+        android:id="@+id/tv_item_device_imei"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:text="IMEI: 000000000000"
+        android:text="IMEI: "
         android:textColor="@color/black"
         android:textSize="16sp"
-        app:layout_constraintStart_toEndOf="@+id/iv_device_icon"
-        app:layout_constraintTop_toBottomOf="@id/tv_device_name" />
+        app:layout_constraintStart_toEndOf="@+id/iv_item_device_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_item_device_name" />
 
     <TextView
-        android:id="@+id/tv_device_last_seen"
+        android:id="@+id/tv_item_device_last_seen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -52,8 +59,8 @@
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/iv_device_icon"
-        app:layout_constraintTop_toBottomOf="@id/tv_device_imei" />
+        app:layout_constraintStart_toEndOf="@+id/iv_item_device_icon"
+        app:layout_constraintTop_toBottomOf="@id/tv_item_device_imei" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
