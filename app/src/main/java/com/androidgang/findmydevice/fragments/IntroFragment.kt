@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.androidgang.findmydevice.R
-import com.androidgang.findmydevice.databinding.FragmentDevicesBinding
 import com.androidgang.findmydevice.databinding.FragmentIntroBinding
 
 

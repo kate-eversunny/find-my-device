@@ -1,9 +1,11 @@
 package com.androidgang.findmydevice.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
@@ -16,6 +18,9 @@ import com.androidgang.findmydevice.adapters.decorators.SpacingItemDecoration
 import com.androidgang.findmydevice.databinding.FragmentDevicesBinding
 import com.androidgang.findmydevice.helpers.Constants
 import com.androidgang.findmydevice.models.Smartphone
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class DevicesFragment : Fragment(), View.OnClickListener {
@@ -24,7 +29,12 @@ class DevicesFragment : Fragment(), View.OnClickListener {
     private val binding get() = _binding!!
 
     private lateinit var navController: NavController
+    private lateinit var auth: FirebaseAuth
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        auth = Firebase.auth
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,7 +69,9 @@ class DevicesFragment : Fragment(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v!!.id) {
           R.id.btn_sign_out -> {
-              requireActivity().onBackPressed()
+              auth.signOut()
+//              requireActivity().onBackPressed()
+              navController.navigate(R.id.action_devicesFragment_to_introFragment)
           }
         }
     }
