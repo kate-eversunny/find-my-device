@@ -1,48 +1,109 @@
 package com.androidgang.findmydevice.fragments
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.androidgang.findmydevice.R
 import com.androidgang.findmydevice.databinding.FragmentSignUpBinding
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 
 
 class SignUpFragment : Fragment(), View.OnClickListener {
-    private var _binding: FragmentSignUpBinding? = null
-    private val binding get() = _binding!!
+	private var _binding: FragmentSignUpBinding? = null
+	private val binding get() = _binding!!
 
-    private lateinit var navController: NavController
+	private lateinit var navController: NavController
+	private lateinit var auth: FirebaseAuth
+	private lateinit var inputManager: InputMethodManager
 
+	override fun onCreate(savedInstanceState: Bundle?) {
+		super.onCreate(savedInstanceState)
+		auth = Firebase.auth
+		inputManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+	}
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        _binding = FragmentSignUpBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+	override fun onCreateView(
+		inflater: LayoutInflater, container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View? {
+		// Inflate the layout for this fragment
+		_binding = FragmentSignUpBinding.inflate(inflater, container, false)
+		return binding.root
+	}
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        navController = Navigation.findNavController(view)
-        binding.btnSignUp.setOnClickListener(this)
-    }
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
+		navController = Navigation.findNavController(view)
+		binding.btnSignUp.setOnClickListener(this)
+	}
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+	override fun onDestroyView() {
+		super.onDestroyView()
+		_binding = null
+	}
 
-    override fun onClick(v: View?) {
-        when(v!!.id){
-            R.id.btn_sign_up -> {
-                requireActivity().onBackPressed()
-            }
-        }
-    }
+	override fun onClick(v: View?) {
+		when (v!!.id) {
+			R.id.btn_sign_up -> {
+				inputManager.hideSoftInputFromWindow(
+					view?.windowToken,
+					InputMethodManager.HIDE_NOT_ALWAYS
+				)
+				if (isInputValid()) {
+					createAccount()
+				}
+			}
+		}
+	}
+
+	private fun isInputValid(): Boolean {
+		if (binding.etEmailSignUp.text.toString().isEmpty()) {
+			Toast.makeText(
+				this.context, ("Please enter your email address"),
+				Toast.LENGTH_SHORT
+			).show()
+			return false
+		} else if (binding.etPasswordSignUp.text.toString().isEmpty()) {
+			Toast.makeText(
+				this.context, ("Please enter a password"),
+				Toast.LENGTH_SHORT
+			).show()
+			return false
+		}
+		return true
+	}
+
+	private fun createAccount() {
+		auth.createUserWithEmailAndPassword(
+			binding.etEmailSignUp.text.toString(),
+			binding.etPasswordSignUp.text.toString()
+		)
+			.addOnCompleteListener(this.activity as Activity) { task ->
+				if (task.isSuccessful) {
+					// Sign in success, update UI with the signed-in user's information
+					Log.d(tag, "createUserWithEmail:success")
+					navController.navigate(R.id.action_signUpFragment_to_devicesFragment)
+
+				} else {
+					// If sign in fails, display a message to the user.
+					Log.w(tag, "createUserWithEmail:failure", task.exception)
+					Toast.makeText(
+						this.context, (task.exception?.message ?: "Authentication failed"),
+						Toast.LENGTH_LONG
+					).show()
+				}
+			}
+	}
+
 }

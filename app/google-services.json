@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "386272332440",
+    "project_id": "findmydeviceapp-4dbac",
+    "storage_bucket": "findmydeviceapp-4dbac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386272332440:android:f4fec4182202167f8d9eed",
+        "android_client_info": {
+          "package_name": "com.androidgang.findmydevice"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386272332440-5tpogcu7famot9ot50j5vq6aurvc8ih9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUsHJg_GUcEDSWwLQfcGWK2xiJE40UuOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386272332440-5tpogcu7famot9ot50j5vq6aurvc8ih9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

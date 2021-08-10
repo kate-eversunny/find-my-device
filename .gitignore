@@ -4,7 +4,6 @@
 .DS_Store
 /build
 Добавить такие строки:
-gradle.properties
 .navigation
 /captures
 *.iml
