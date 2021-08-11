@@ -1,7 +1,7 @@
 package com.androidgang.findmydevice.fragments
 
 import android.app.Activity
-import android.content.Context
+import android.content.Context.*
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,14 +14,20 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.androidgang.findmydevice.R
 import com.androidgang.findmydevice.databinding.FragmentSignUpBinding
+import com.androidgang.findmydevice.helpers.Constants.FIREBASE_DATABASE_URL
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 
 
 class SignUpFragment : Fragment(), View.OnClickListener {
 	private var _binding: FragmentSignUpBinding? = null
 	private val binding get() = _binding!!
+	private val database = Firebase.database(FIREBASE_DATABASE_URL).reference
 
 	private lateinit var navController: NavController
 	private lateinit var auth: FirebaseAuth
@@ -30,7 +36,7 @@ class SignUpFragment : Fragment(), View.OnClickListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		auth = Firebase.auth
-		inputManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+		inputManager = context?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
 	}
 
 	override fun onCreateView(
@@ -93,6 +99,30 @@ class SignUpFragment : Fragment(), View.OnClickListener {
 				if (task.isSuccessful) {
 					// Sign in success, update UI with the signed-in user's information
 					Log.d(tag, "createUserWithEmail:success")
+					var flag = false
+					database.child("Users").child(auth.currentUser!!.uid).child("email").setValue(auth.currentUser!!.email!!)
+					database.child("Users").child(auth.currentUser!!.uid).child("Devices").addValueEventListener(
+						object: ValueEventListener {
+							override fun onDataChange(snapshot: DataSnapshot) {
+								if (snapshot.value != null) {
+									val td = snapshot.value as HashMap<*, *>
+									for (key in td.keys) {
+										if (key == android.os.Build.MODEL) {
+											flag = true
+											break
+										}
+									}
+								}
+								if (!flag) {
+									database.child("Users").child(auth.currentUser!!.uid)
+										.child("Devices").child(android.os.Build.MODEL)
+								}
+							}
+							override fun onCancelled(error: DatabaseError) {
+								TODO("Not yet implemented")
+							}
+						}
+					)
 					navController.navigate(R.id.action_signUpFragment_to_devicesFragment)
 
 				} else {
